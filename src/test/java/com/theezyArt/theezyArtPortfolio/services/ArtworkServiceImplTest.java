@@ -135,10 +135,11 @@ class ArtworkServiceImplTest {
         UpdateArtworkRequest artworkRequest = new UpdateArtworkRequest();
         setUpdateArtworkRequest(artworkRequest);
 
-        UpdateArtworkResponse updatedArtwork = artworkService.editArtwork(savedResponse.getTitle(), artworkRequest);
+        UpdateArtworkResponse updatedArtwork = artworkService.editArtwork(savedResponse.getId(), artworkRequest);
         assertNotEquals("test-image Memories", updatedArtwork.getTitle());
         assertEquals("test-image Memories Updated", updatedArtwork.getTitle());
         System.out.println("Saved artwork response: " + savedResponse);
+        System.out.println("Updated artwork response: " + updatedArtwork);
 
     }
 }

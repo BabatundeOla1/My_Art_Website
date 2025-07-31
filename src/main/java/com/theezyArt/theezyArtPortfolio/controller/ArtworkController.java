@@ -2,8 +2,10 @@ package com.theezyArt.theezyArtPortfolio.controller;
 
 import com.theezyArt.theezyArtPortfolio.data.model.Artwork;
 import com.theezyArt.theezyArtPortfolio.dto.request.SaveArtworkRequest;
+import com.theezyArt.theezyArtPortfolio.dto.request.UpdateArtworkRequest;
 import com.theezyArt.theezyArtPortfolio.dto.response.DeleteArtworkResponse;
 import com.theezyArt.theezyArtPortfolio.dto.response.SaveArtworkResponse;
+import com.theezyArt.theezyArtPortfolio.dto.response.UpdateArtworkResponse;
 import com.theezyArt.theezyArtPortfolio.services.AdminService;
 import com.theezyArt.theezyArtPortfolio.services.ArtworkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,13 @@ public class ArtworkController {
     @GetMapping("viewAllArtworks")
     public List<Artwork> getAllArtworks(){
         return artworkService.getAllArtworks();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("editArtwork/{artworkId}")
+    public ResponseEntity<UpdateArtworkResponse> editArtwork(@PathVariable("artworkId") String artworkId, @RequestBody UpdateArtworkRequest updateArtworkRequest){
+        UpdateArtworkResponse updateResponse = artworkService.editArtwork(artworkId, updateArtworkRequest);
+        return new ResponseEntity<>(updateResponse, HttpStatus.OK);
     }
 
 }

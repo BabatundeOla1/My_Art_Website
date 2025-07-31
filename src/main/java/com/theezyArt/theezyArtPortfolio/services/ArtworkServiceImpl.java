@@ -56,9 +56,9 @@ public class ArtworkServiceImpl implements ArtworkService{
     }
 
     @Override
-    public UpdateArtworkResponse editArtwork(String title, UpdateArtworkRequest updateArtworkRequest) {
+    public UpdateArtworkResponse editArtwork(String artworkId, UpdateArtworkRequest updateArtworkRequest) {
 
-        Artwork foundArtwork = artworkRepository.findArtworkByTitle(title)
+        Artwork foundArtwork = artworkRepository.findArtworkById(artworkId)
                 .orElseThrow(() -> new ArtworkNotFoundException("Artwork not found"));
 
         foundArtwork.setTitle(updateArtworkRequest.getTitle());

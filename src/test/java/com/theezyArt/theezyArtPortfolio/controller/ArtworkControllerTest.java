@@ -5,7 +5,9 @@ import com.theezyArt.theezyArtPortfolio.data.repositories.AdminRepository;
 import com.theezyArt.theezyArtPortfolio.data.repositories.ArtworkRepository;
 import com.theezyArt.theezyArtPortfolio.dto.request.AdminLoginRequest;
 import com.theezyArt.theezyArtPortfolio.dto.request.SaveArtworkRequest;
+import com.theezyArt.theezyArtPortfolio.dto.request.UpdateArtworkRequest;
 import com.theezyArt.theezyArtPortfolio.dto.response.AdminLoginResponse;
+import com.theezyArt.theezyArtPortfolio.dto.response.SaveArtworkResponse;
 import com.theezyArt.theezyArtPortfolio.services.AdminService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +16,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -61,6 +63,14 @@ class ArtworkControllerTest {
 
         AdminLoginResponse adminLoginResponse = adminService.login(admin);
         adminToken = adminLoginResponse.getAccessToken();
+    }
+
+    void setUpdateArtworkRequest(UpdateArtworkRequest updateArtworkRequest){
+        updateArtworkRequest.setYear(2025);
+        updateArtworkRequest.setMedium("Acrylic on Canvas");
+        updateArtworkRequest.setImagePath("C:\\Users\\DELL USER\\Pictures\\my works\\A Guide To life_grid2.png");
+        updateArtworkRequest.setTitle("Testing IntegrationTest To Change Artwork Title");
+        updateArtworkRequest.setSize("70cm by 70cm");
     }
 
     @Test
@@ -134,6 +144,34 @@ class ArtworkControllerTest {
 
         mockMvc.perform(delete("/api/admin/deleteArtwork")
                         .param("title", request.getTitle()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void testThatArtworkSavedArtworkCanBeUpdated() throws Exception{
+        SaveArtworkRequest request = new SaveArtworkRequest();
+        request.setTitle("Why Are We Here");
+        request.setMedium("Acrylic on Canvas");
+        request.setSize("20cm by 20cm");
+        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
+        request.setYear(2023);
+
+        MockHttpServletResponse response = mockMvc.perform(post("/api/admin/saveArtwork")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                 .andReturn()
+                 .getResponse();
+
+        SaveArtworkResponse saveArtworkResponse = objectMapper.readValue(response.getContentAsString(), SaveArtworkResponse.class);
+
+        UpdateArtworkRequest updateArtworkRequest = new UpdateArtworkRequest();
+        setUpdateArtworkRequest(updateArtworkRequest);
+
+        mockMvc.perform(post("/api/admin/editArtwork/" + saveArtworkResponse.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateArtworkRequest)))
                 .andExpect(status().isOk());
     }
 }
