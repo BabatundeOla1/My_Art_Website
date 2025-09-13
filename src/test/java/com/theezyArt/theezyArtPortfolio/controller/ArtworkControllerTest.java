@@ -20,9 +20,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.List;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -149,7 +146,7 @@ class ArtworkControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void testThatArtworkSavedArtworkCanBeUpdated() throws Exception{
+    void testThatSavedArtworkCanBeUpdated() throws Exception{
         SaveArtworkRequest request = new SaveArtworkRequest();
         request.setTitle("Why Are We Here");
         request.setMedium("Acrylic on Canvas");

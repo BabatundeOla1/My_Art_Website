@@ -1,18 +1,9 @@
-version: '3.8'
-
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
-
   theezy-art-app:
     build: .
     container_name: theezy-art-app
-    depends_on:
-      - mongodb
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/artportfolio
+      - SPRING_DATA_MONGODB_URI=${MONGO_URI}
+      - SPRING_DATA_MONGODB_DATABASE=artportfolio
