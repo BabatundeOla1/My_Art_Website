@@ -5,6 +5,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,16 @@ public class CloudinaryService {
             throw new RuntimeException("Upload to Cloudinary failed", e);
         }
     }
+
+//    public String uploadImage(MultipartFile multipartFile) {
+//        try {
+//            Map<String, Object> options = ObjectUtils.asMap("folder", "ArtWebsite");
+//            Map<?, ?> response = cloudinary.uploader().upload(multipartFile.getBytes(), options);
+//            return response.get("secure_url").toString();
+//        } catch (IOException e) {
+//            throw new RuntimeException("Upload to Cloudinary failed", e);
+//        }
+//    }
 
 
 //    public String uploadImageForTest(String filePath) {
