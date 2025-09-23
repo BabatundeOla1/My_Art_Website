@@ -37,7 +37,6 @@ public class JWTService {
 
     public String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-//        claims.put("role", userDetails.getAuthorities());
         return generateToken(claims, userDetails);
     }
 
@@ -51,7 +50,7 @@ public class JWTService {
         extractClaims.put("role", userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
-                .map(auth -> auth.replace("ROLE_", "")) // strip ROLE_ before saving
+                .map(auth -> auth.replace("ROLE_", ""))
                 .toList());
 
 

@@ -4,6 +4,9 @@ services:
     container_name: theezy-art-app
     ports:
       - "8080:8080"
+    env_file:
+      - ./src/main/resources/.env
     environment:
-      - SPRING_DATA_MONGODB_URI=${MONGO_URI}
-      - SPRING_DATA_MONGODB_DATABASE=artportfolio
+      SPRING_DATA_MONGODB_URI: ${SPRING_DATA_MONGODB_URI}
+      SPRING_DATA_MONGODB_DATABASE: ${SPRING_DATA_MONGODB_DATABASE}
+
