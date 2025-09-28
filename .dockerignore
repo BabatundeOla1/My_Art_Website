@@ -1,0 +1,13 @@
+target
+.git
+node_modules
+*.iml
+.idea
+.env
+HELP.md
+mvnw
+mvnw.cmd
+.gitignore
+README.md
+Dockerfile
+Docker-compose.yml

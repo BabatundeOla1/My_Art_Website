@@ -3,10 +3,27 @@ services:
     build: .
     container_name: theezy-art-app
     ports:
-      - "8080:8080"
+      - "8087:8087"
     env_file:
-      - ./src/main/resources/.env
-    environment:
-      SPRING_DATA_MONGODB_URI: ${SPRING_DATA_MONGODB_URI}
-      SPRING_DATA_MONGODB_DATABASE: ${SPRING_DATA_MONGODB_DATABASE}
+      - ./.env
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8087/api/admin/viewAllArtworks",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
+networks:
+  app-network:
+    driver: bridge

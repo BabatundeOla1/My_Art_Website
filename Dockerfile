@@ -16,11 +16,22 @@ RUN mvn clean package -DskipTests
 FROM openjdk:21-jdk-slim
 WORKDIR /app
 
+# Install wget for health checks and ca-certificates for SSL
+RUN apt-get update && apt-get install -y wget ca-certificates && rm -rf /var/lib/apt/lists/*
+
+# Update CA certificates for MongoDB Atlas SSL connections
+RUN update-ca-certificates
+
 # Copy the built JAR from the build stage
 COPY --from=build /app/target/theezyArtPortfolio-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose port
-EXPOSE 8080
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN chown -R appuser:appuser /app
+USER appuser
 
-# Run the app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Expose port
+EXPOSE 8087
+
+# Run the app with proper JVM settings for containerized environment
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
