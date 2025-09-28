@@ -1,7 +1,6 @@
 package com.theezyArt.theezyArtPortfolio.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import com.theezyArt.theezyArtPortfolio.data.model.Artwork;
 import com.theezyArt.theezyArtPortfolio.data.repositories.ArtworkRepository;
 import com.theezyArt.theezyArtPortfolio.dto.request.SaveArtworkRequest;
@@ -15,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 
 
 @SpringBootTest
@@ -25,14 +27,13 @@ class ArtworkServiceImplTest {
     private final ObjectMapper objectMapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT);
 
-
     @Autowired
     private ArtworkService artworkService;
 
     @Autowired
     private ArtworkRepository artworkRepository;
 
-    @Autowired
+    @MockBean
     private CloudinaryService cloudinaryService;
 
     @BeforeEach
@@ -42,23 +43,45 @@ class ArtworkServiceImplTest {
     }
 
     void setUpArtwork(SaveArtworkRequest saveArtworkRequest){
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "imageFile",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
         saveArtworkRequest.setYear(2025);
         saveArtworkRequest.setMedium("Acrylic on Canvas");
-        saveArtworkRequest.setImagePath("C:\\Users\\DELL USER\\Pictures\\my works\\A Guide To life_grid2.png");
+        saveArtworkRequest.setImageFile(mockFile);
         saveArtworkRequest.setTitle("test-image Memories");
         saveArtworkRequest.setSize("70cm by 70cm");
     }
     void setUpdateArtworkRequest(UpdateArtworkRequest updateArtworkRequest){
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "imageFile",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
         updateArtworkRequest.setYear(2025);
         updateArtworkRequest.setMedium("Acrylic on Canvas");
-        updateArtworkRequest.setImagePath("C:\\Users\\DELL USER\\Pictures\\my works\\A Guide To life_grid2.png");
+//        updateArtworkRequest.setImageFile(mockFile);
         updateArtworkRequest.setTitle("test-image Memories Updated");
         updateArtworkRequest.setSize("70cm by 70cm");
     }
     void setUpSecondArtwork(SaveArtworkRequest secondArtwork){
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "imageFile",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
         secondArtwork.setYear(2025);
         secondArtwork.setMedium("Acrylic on Canvas");
-        secondArtwork.setImagePath("C:\\Users\\DELL USER\\Pictures\\my works\\Pinterest\\download (1).jpg");
+        secondArtwork.setImageFile(mockFile);
         secondArtwork.setTitle("test-image Moment of reflection");
         secondArtwork.setSize("40cm by 70cm");
     }
@@ -67,6 +90,8 @@ class ArtworkServiceImplTest {
     void testThatArtworkCanBeSaved() {
         SaveArtworkRequest saveArtworkRequest = new SaveArtworkRequest();
         setUpArtwork(saveArtworkRequest);
+
+        when(cloudinaryService.uploadImage(saveArtworkRequest.getImageFile())).thenReturn("https://cloudinary.com/test-image.jpg");
 
         SaveArtworkResponse savedResponse = artworkService.saveArtwork(saveArtworkRequest);
 
@@ -82,6 +107,8 @@ class ArtworkServiceImplTest {
     void TestThatArtworkCanBeDeleted(){
         SaveArtworkRequest saveArtworkRequest = new SaveArtworkRequest();
         setUpArtwork(saveArtworkRequest);
+
+        when(cloudinaryService.uploadImage(saveArtworkRequest.getImageFile())).thenReturn("https://cloudinary.com/test-image.jpg");
 
         SaveArtworkResponse savedResponse = artworkService.saveArtwork(saveArtworkRequest);
 
@@ -126,6 +153,8 @@ class ArtworkServiceImplTest {
     void testThatASavedArtworkCanBeUpdated(){
         SaveArtworkRequest saveArtworkRequest = new SaveArtworkRequest();
         setUpArtwork(saveArtworkRequest);
+
+        when(cloudinaryService.uploadImage(saveArtworkRequest.getImageFile())).thenReturn("https://cloudinary.com/test-image.jpg");
 
         SaveArtworkResponse savedResponse = artworkService.saveArtwork(saveArtworkRequest);
 

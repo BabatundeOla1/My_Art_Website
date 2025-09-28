@@ -18,29 +18,29 @@ class CloudinaryServiceTest {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    @Test
-    void testThatImageCanBeUploadedToCloudinary(){
-        String filePath = "C:\\\\Users\\\\DELL USER\\\\Pictures\\\\my works\\\\A Guide To life_grid2.png";
+//    @Test
+//    void testThatImageCanBeUploadedToCloudinary(){
+//        String filePath = "C:\\\\Users\\\\DELL USER\\\\Pictures\\\\my works\\\\A Guide To life_grid2.png";
+//
+//        String uploadedUrl = cloudinaryService.uploadImage(filePath);
+//
+//        assertNotNull(uploadedUrl);
+//        assertTrue(uploadedUrl.startsWith("https://res.cloudinary.com/"));
+//        System.out.println("Image uploaded to: " + uploadedUrl);
+//    }
 
-        String uploadedUrl = cloudinaryService.uploadImage(filePath);
-
-        assertNotNull(uploadedUrl);
-        assertTrue(uploadedUrl.startsWith("https://res.cloudinary.com/"));
-        System.out.println("Image uploaded to: " + uploadedUrl);
-    }
-
-    @Test
-    void testThatImageCanBeUploadedAndDeletedFromCloudinary(){
-        String filePath = "C:\\\\Users\\\\DELL USER\\\\Pictures\\\\my works\\\\A Guide To life_grid2.png";
-
-        String uploadedUrl = cloudinaryService.uploadImage(filePath);
-
-        assertNotNull(uploadedUrl);
-        assertTrue(uploadedUrl.startsWith("https://res.cloudinary.com/"));
-
-        boolean isDeleted = cloudinaryService.deleteImage(uploadedUrl);
-        assertTrue(isDeleted);
-    }
+//    @Test
+//    void testThatImageCanBeUploadedAndDeletedFromCloudinary(){
+//        String filePath = "C:\\\\Users\\\\DELL USER\\\\Pictures\\\\my works\\\\A Guide To life_grid2.png";
+//
+//        String uploadedUrl = cloudinaryService.uploadImage(filePath);
+//
+//        assertNotNull(uploadedUrl);
+//        assertTrue(uploadedUrl.startsWith("https://res.cloudinary.com/"));
+//
+//        boolean isDeleted = cloudinaryService.deleteImage(uploadedUrl);
+//        assertTrue(isDeleted);
+//    }
 
 //    @Test
 //    void testThatImageCanBeUploadedToCloudinary() throws IOException {

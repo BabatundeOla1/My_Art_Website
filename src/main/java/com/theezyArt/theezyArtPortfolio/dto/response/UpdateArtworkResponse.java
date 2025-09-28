@@ -10,5 +10,4 @@ public class UpdateArtworkResponse {
     private int year;
     private String size;
     private String imageUrl;
-    private String imagePath;
 }

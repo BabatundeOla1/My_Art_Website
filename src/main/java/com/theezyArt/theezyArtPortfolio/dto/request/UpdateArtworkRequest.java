@@ -2,6 +2,7 @@ package com.theezyArt.theezyArtPortfolio.dto.request;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UpdateArtworkRequest {
@@ -11,6 +12,4 @@ public class UpdateArtworkRequest {
     private String medium;
     private int year;
     private String size;
-    private String imagePath;
-    private String imageUrl;
 }

@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -63,26 +64,39 @@ class ArtworkControllerTest {
     }
 
     void setUpdateArtworkRequest(UpdateArtworkRequest updateArtworkRequest){
+
         updateArtworkRequest.setYear(2025);
         updateArtworkRequest.setMedium("Acrylic on Canvas");
-        updateArtworkRequest.setImagePath("C:\\Users\\DELL USER\\Pictures\\my works\\A Guide To life_grid2.png");
+//        updateArtworkRequest.setImagePath("C:\\Users\\DELL USER\\Pictures\\my works\\A Guide To life_grid2.png");
         updateArtworkRequest.setTitle("Testing IntegrationTest To Change Artwork Title");
         updateArtworkRequest.setSize("70cm by 70cm");
     }
 
     @Test
     void testThatAuthenticatedAdmin_CanSaveArtwork() throws Exception{
+
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "imageFile",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
         SaveArtworkRequest request = new SaveArtworkRequest();
         request.setTitle("Why Are We Here");
         request.setMedium("Acrylic on Canvas");
         request.setSize("20cm by 20cm");
-        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
+        request.setImageFile(imageFile);
         request.setYear(2023);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/saveArtwork")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/admin/saveArtwork")
+                        .file(imageFile)
+                        .param("title", "Why Are We Here")
+                        .param("medium", "Acrylic on Canvas")
+                        .param("size", "20cm by 20cm")
+                        .param("year", "2023")
                         .header("Authorization", "Bearer " + adminToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
     }
 
@@ -92,7 +106,7 @@ class ArtworkControllerTest {
         request.setTitle("Why Are We Here");
         request.setMedium("Acrylic on Canvas");
         request.setSize("20cm by 20cm");
-        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
+//        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
         request.setYear(2023);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/saveArtwork")
@@ -115,7 +129,7 @@ class ArtworkControllerTest {
         request.setTitle("Why Are We Here");
         request.setMedium("Acrylic on Canvas");
         request.setSize("20cm by 20cm");
-        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
+//        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
         request.setYear(2023);
 
         mockMvc.perform(post("/api/admin/saveArtwork")
@@ -131,7 +145,7 @@ class ArtworkControllerTest {
         request.setTitle("Why Are We Here");
         request.setMedium("Acrylic on Canvas");
         request.setSize("20cm by 20cm");
-        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
+//        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
         request.setYear(2023);
 
         mockMvc.perform(post("/api/admin/saveArtwork")
@@ -151,7 +165,7 @@ class ArtworkControllerTest {
         request.setTitle("Why Are We Here");
         request.setMedium("Acrylic on Canvas");
         request.setSize("20cm by 20cm");
-        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
+//        request.setImagePath("C:\\Users\\DELL USER\\Pictures\\Saved Pictures\\WhatsApp Image 2025-01-11 at 14.54.01_23807e85.jpg");
         request.setYear(2023);
 
         MockHttpServletResponse response = mockMvc.perform(post("/api/admin/saveArtwork")

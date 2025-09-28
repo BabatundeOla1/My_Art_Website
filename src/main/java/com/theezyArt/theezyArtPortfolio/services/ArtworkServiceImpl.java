@@ -26,10 +26,20 @@ public class ArtworkServiceImpl implements ArtworkService{
     @Autowired
     private CloudinaryService cloudinaryService;
 
+    // @Override
+    // public SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest) {
+
+    //     String imageUrl = cloudinaryService.uploadImage(saveArtworkRequest.getImagePath());
+    //     saveArtworkRequest.setImageUrl(imageUrl);
+
+    //     Artwork newArtwork = modelMapper.map(saveArtworkRequest, Artwork.class);
+    //     Artwork savedArtwork = artworkRepository.save(newArtwork);
+    //     return modelMapper.map(savedArtwork, SaveArtworkResponse.class);
+    // }
+
     @Override
     public SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest) {
-
-        String imageUrl = cloudinaryService.uploadImage(saveArtworkRequest.getImagePath());
+        String imageUrl = cloudinaryService.uploadImage(saveArtworkRequest.getImageFile());
         saveArtworkRequest.setImageUrl(imageUrl);
 
         Artwork newArtwork = modelMapper.map(saveArtworkRequest, Artwork.class);
@@ -61,12 +71,24 @@ public class ArtworkServiceImpl implements ArtworkService{
         Artwork foundArtwork = artworkRepository.findArtworkById(artworkId)
                 .orElseThrow(() -> new ArtworkNotFoundException("Artwork not found"));
 
-        foundArtwork.setTitle(updateArtworkRequest.getTitle());
-        foundArtwork.setSize(updateArtworkRequest.getSize());
-        foundArtwork.setYear(updateArtworkRequest.getYear());
-        foundArtwork.setMedium(updateArtworkRequest.getMedium());
+        verifyArtworkDetails(updateArtworkRequest, foundArtwork);
 
         Artwork updatedArtwork = artworkRepository.save(foundArtwork);
         return modelMapper.map(updatedArtwork, UpdateArtworkResponse.class);
+    }
+
+    private static void verifyArtworkDetails(UpdateArtworkRequest updateArtworkRequest, Artwork foundArtwork) {
+        if (updateArtworkRequest.getTitle() != null && !updateArtworkRequest.getTitle().isBlank()) {
+            foundArtwork.setTitle(updateArtworkRequest.getTitle());
+        }
+        if (updateArtworkRequest.getMedium() != null && !updateArtworkRequest.getMedium().isBlank()) {
+            foundArtwork.setMedium(updateArtworkRequest.getMedium());
+        }
+        if (updateArtworkRequest.getSize() != null && !updateArtworkRequest.getSize().isBlank()) {
+            foundArtwork.setSize(updateArtworkRequest.getSize());
+        }
+        if (updateArtworkRequest.getYear() > 0) {
+            foundArtwork.setYear(updateArtworkRequest.getYear());
+        }
     }
 }

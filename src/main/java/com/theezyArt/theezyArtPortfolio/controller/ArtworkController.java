@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,12 +28,33 @@ public class ArtworkController {
     private ArtworkService artworkService;
 
 
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PostMapping("saveArtwork")
+//    public ResponseEntity<SaveArtworkResponse> saveArtwork(@RequestBody SaveArtworkRequest saveArtworkRequest){
+//        SaveArtworkResponse response = artworkService.saveArtwork(saveArtworkRequest);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("saveArtwork")
-    public ResponseEntity<SaveArtworkResponse> saveArtwork(@RequestBody SaveArtworkRequest saveArtworkRequest){
-        SaveArtworkResponse response = artworkService.saveArtwork(saveArtworkRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<SaveArtworkResponse> saveArtwork(
+            @RequestParam("title") String title,
+            @RequestParam("medium") String medium,
+            @RequestParam("year") int year,
+            @RequestParam("size") String size,
+            @RequestPart("imageFile") MultipartFile imageFile) {
+
+        SaveArtworkRequest request = new SaveArtworkRequest();
+        request.setTitle(title);
+        request.setMedium(medium);
+        request.setYear(year);
+        request.setSize(size);
+        request.setImageFile(imageFile);
+
+        SaveArtworkResponse response = artworkService.saveArtwork(request);
+        return ResponseEntity.ok(response);
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("deleteArtwork")

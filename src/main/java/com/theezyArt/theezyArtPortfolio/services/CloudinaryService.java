@@ -24,42 +24,27 @@ public class CloudinaryService {
         ));
     }
 
-    public String uploadImage(String filePath) {
-        verifyFilePath(filePath);
+//    public String uploadImage(String filePath) {
+//        verifyFilePath(filePath);
+//        try {
+//            File file = new File(filePath);
+//            Map<String, Object> options = ObjectUtils.asMap("folder", "ArtWebsite");
+//            Map<?, ?> response = cloudinary.uploader().upload(file, options);
+//            return response.get("secure_url").toString();
+//        } catch (IOException e) {
+//            throw new RuntimeException("Upload to Cloudinary failed", e);
+//        }
+//    }
+
+    public String uploadImage(MultipartFile multipartFile) {
         try {
-            File file = new File(filePath);
             Map<String, Object> options = ObjectUtils.asMap("folder", "ArtWebsite");
-            Map<?, ?> response = cloudinary.uploader().upload(file, options);
+            Map<?, ?> response = cloudinary.uploader().upload(multipartFile.getBytes(), options);
             return response.get("secure_url").toString();
         } catch (IOException e) {
             throw new RuntimeException("Upload to Cloudinary failed", e);
         }
     }
-
-//    public String uploadImage(MultipartFile multipartFile) {
-//        try {
-//            Map<String, Object> options = ObjectUtils.asMap("folder", "ArtWebsite");
-//            Map<?, ?> response = cloudinary.uploader().upload(multipartFile.getBytes(), options);
-//            return response.get("secure_url").toString();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Upload to Cloudinary failed", e);
-//        }
-//    }
-
-
-//    public String uploadImageForTest(String filePath) {
-//        verifyFilePath(filePath);
-//        try {
-//            File file = new File(filePath);
-//            Map<String, Object> options = ObjectUtils.asMap("tags", new String[]{"test-image"});
-//            Map<?, ?> response = cloudinary.uploader().upload(file, options);
-//            String publicId = response.get("public_id").toString();
-//            System.out.println("Uploaded image public_id: " + publicId);
-//            return response.get("secure_url").toString();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Upload to Cloudinary failed", e);
-//        }
-//    }
 
     public boolean deleteImage(String imageUrl) {
         try {
