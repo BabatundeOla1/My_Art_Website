@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import jakarta.annotation.PostConstruct;
 
 
 @Service
@@ -73,9 +73,17 @@ public class JWTService {
         }
         return List.of();
     }
-    public  boolean isTokenValid(String token, UserDetails userDetails){
-        final String username = extractUserName(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    public  boolean isTokenValid(String token, UserDetails userDetails){        
+        try {            
+            final String username = extractUserName(token);            
+            boolean isUsernameMatch = username.equals(userDetails.getUsername());            
+            boolean isNotExpired = !isTokenExpired(token);            
+            System.out.println("JWTService: Token validation - username match: " + isUsernameMatch + ", not expired: " + isNotExpired);            
+            return isUsernameMatch && isNotExpired;        
+        } catch (Exception e) {            
+            System.out.println("JWTService: Token validation failed: " + e.getMessage());            
+            return false;        
+        }
     }
     private Claims extractAllClaims(String token){
         return Jwts.parser()
@@ -92,9 +100,26 @@ public class JWTService {
     }
     private Key getSignInKey() {
         if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
+            System.err.println("JWT Secret Key is not configured!");
             throw new JWTIsEmptyException("JWT Secret Key is not configured");
         }
+        System.out.println("JWT Secret loaded successfully, length: " + SECRET_KEY.length());
+        System.out.println("JWT Secret starts with: " + (SECRET_KEY.length() > 10 ? SECRET_KEY.substring(0, 10) : SECRET_KEY));
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        System.out.println("JWT Secret decoded successfully, byte length: " + keyBytes.length);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    @PostConstruct
+    public void init() {
+        try {
+            System.out.println("JWTService initializing...");
+            System.out.println("JWT Secret configuration status: " + (SECRET_KEY != null && !SECRET_KEY.isEmpty() ? "Configured" : "Not configured"));
+            if (SECRET_KEY != null && !SECRET_KEY.isEmpty()) {
+                System.out.println("JWT Secret length: " + SECRET_KEY.length());
+            }
+        } catch (Exception e) {
+            System.err.println("Error during JWTService initialization: " + e.getMessage());
+        }
     }
 }
