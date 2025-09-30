@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface ArtworkService {
 
-    // SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest);
     SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest);
     DeleteArtworkResponse deleteArtwork(String title);
     List<Artwork> getAllArtworks();

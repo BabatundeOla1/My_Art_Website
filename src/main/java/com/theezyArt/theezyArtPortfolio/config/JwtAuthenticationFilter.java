@@ -38,7 +38,7 @@ package com.theezyArt.theezyArtPortfolio.config;
         @Override
     protected void doFilterInternal(HttpServletRequest request,  HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        System.out.println("JwtAuthenticationFilter: Processing request to " + requestURI);
+//        System.out.println("JwtAuthenticationFilter: Processing request to " + requestURI);
         
         // Skip JWT processing for debug and saveArtwork endpoints to avoid conflicts
         if (requestURI.startsWith("/api/debug")) {
@@ -48,32 +48,32 @@ package com.theezyArt.theezyArtPortfolio.config;
         }
 
         final String authHeader = request.getHeader("Authorization");
-        System.out.println("JwtAuthenticationFilter: Authorization header present: " + (authHeader != null));
+//        System.out.println("JwtAuthenticationFilter: Authorization header present: " + (authHeader != null));
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("JwtAuthenticationFilter: No valid Bearer token found, continuing filter chain");
+//            System.out.println("JwtAuthenticationFilter: No valid Bearer token found, continuing filter chain");
             filterChain.doFilter(request, response);
             return;
         }
 
-            System.out.println("JwtAuthenticationFilter: Bearer token found, length: " + authHeader.length());
+//            System.out.println("JwtAuthenticationFilter: Bearer token found, length: " + authHeader.length());
             String jwt = authHeader.substring(7);
-            System.out.println("JwtAuthenticationFilter: Extracted JWT, length: " + jwt.length());
+//            System.out.println("JwtAuthenticationFilter: Extracted JWT, length: " + jwt.length());
             try {
-                System.out.println("JwtAuthenticationFilter: Attempting to extract username from JWT");
+//                System.out.println("JwtAuthenticationFilter: Attempting to extract username from JWT");
                 String userEmail = jwtService.extractUserName(jwt);
-                System.out.println("JwtAuthenticationFilter: Extracted username: " + userEmail);
+//                System.out.println("JwtAuthenticationFilter: Extracted username: " + userEmail);
 
                 if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    System.out.println("JwtAuthenticationFilter: Loading user details for: " + userEmail);
+//                    System.out.println("JwtAuthenticationFilter: Loading user details for: " + userEmail);
                     UserDetails userDetails = this.userDetailService.loadUserByUsername(userEmail);
-                    System.out.println("JwtAuthenticationFilter: User details loaded, checking token validity");
+//                    System.out.println("JwtAuthenticationFilter: User details loaded, checking token validity");
 
                     if (jwtService.isTokenValid(jwt, userDetails)) {
                         // extract roles directly from token
-                        System.out.println("JwtAuthenticationFilter: Token is valid, extracting roles");
+//                        System.out.println("JwtAuthenticationFilter: Token is valid, extracting roles");
                         var roles = jwtService.extractRoles(jwt);
-                        System.out.println("JwtAuthenticationFilter: Extracted roles: " + roles);
+//                        System.out.println("JwtAuthenticationFilter: Extracted roles: " + roles);
                         var authorities = roles.stream()
                                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                                 .toList();
@@ -82,18 +82,18 @@ package com.theezyArt.theezyArtPortfolio.config;
                         UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authToken);
-                        System.out.println("JwtAuthenticationFilter: Authentication set in security context");
+//                        System.out.println("JwtAuthenticationFilter: Authentication set in security context");
                     }
 
                 }
 
                 //IP Address And login info
-                System.out.println("JwtAuthenticationFilter: Recording login history");
+//                System.out.println("JwtAuthenticationFilter: Recording login history");
                 String clientIp = request.getHeader("X-Forwarded-For");
                 if (clientIp == null || clientIp.isEmpty()) {
                     clientIp = request.getRemoteAddr();
                 }
-                System.out.println("JwtAuthenticationFilter: Client IP: " + clientIp);
+//                System.out.println("JwtAuthenticationFilter: Client IP: " + clientIp);
 
                 IPAddress ipAddressResponse = ipAddressService.geoIPLookup(clientIp);
 
@@ -106,12 +106,12 @@ package com.theezyArt.theezyArtPortfolio.config;
                 }
                 history.setTimeStamp(LocalDateTime.now());
                 loginHistoryRepository.save(history);
-                System.out.println("JwtAuthenticationFilter: Login history saved");
+//                System.out.println("JwtAuthenticationFilter: Login history saved");
 
 
             } 
             catch (ExpiredJwtException e){
-                System.out.println("JwtAuthenticationFilter: Token expired: " + e.getMessage());
+//                System.out.println("JwtAuthenticationFilter: Token expired: " + e.getMessage());
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
@@ -119,7 +119,7 @@ package com.theezyArt.theezyArtPortfolio.config;
                 return;
             } 
             catch (Exception e){
-                System.out.println("JwtAuthenticationFilter: Invalid token: " + e.getMessage());
+//                System.out.println("JwtAuthenticationFilter: Invalid token: " + e.getMessage());
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");

@@ -28,13 +28,6 @@ public class ArtworkController {
     private ArtworkService artworkService;
 
 
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping("saveArtwork")
-//    public ResponseEntity<SaveArtworkResponse> saveArtwork(@RequestBody SaveArtworkRequest saveArtworkRequest){
-//        SaveArtworkResponse response = artworkService.saveArtwork(saveArtworkRequest);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("saveArtwork")
     public ResponseEntity<SaveArtworkResponse> saveArtwork(

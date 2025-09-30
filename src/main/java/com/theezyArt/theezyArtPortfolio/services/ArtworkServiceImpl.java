@@ -26,17 +26,6 @@ public class ArtworkServiceImpl implements ArtworkService{
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    // @Override
-    // public SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest) {
-
-    //     String imageUrl = cloudinaryService.uploadImage(saveArtworkRequest.getImagePath());
-    //     saveArtworkRequest.setImageUrl(imageUrl);
-
-    //     Artwork newArtwork = modelMapper.map(saveArtworkRequest, Artwork.class);
-    //     Artwork savedArtwork = artworkRepository.save(newArtwork);
-    //     return modelMapper.map(savedArtwork, SaveArtworkResponse.class);
-    // }
-
     @Override
     public SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest) {
         String imageUrl = cloudinaryService.uploadImage(saveArtworkRequest.getImageFile());

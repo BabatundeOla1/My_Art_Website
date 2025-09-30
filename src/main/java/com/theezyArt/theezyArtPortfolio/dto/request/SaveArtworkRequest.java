@@ -9,7 +9,6 @@ public class SaveArtworkRequest {
     private String medium;
     private int year;
     private String size;
-//    private String imagePath;
     private MultipartFile imageFile;
     private String imageUrl;
 

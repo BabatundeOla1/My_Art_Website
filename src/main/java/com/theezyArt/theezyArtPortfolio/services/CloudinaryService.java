@@ -24,18 +24,6 @@ public class CloudinaryService {
         ));
     }
 
-//    public String uploadImage(String filePath) {
-//        verifyFilePath(filePath);
-//        try {
-//            File file = new File(filePath);
-//            Map<String, Object> options = ObjectUtils.asMap("folder", "ArtWebsite");
-//            Map<?, ?> response = cloudinary.uploader().upload(file, options);
-//            return response.get("secure_url").toString();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Upload to Cloudinary failed", e);
-//        }
-//    }
-
     public String uploadImage(MultipartFile multipartFile) {
         try {
             Map<String, Object> options = ObjectUtils.asMap("folder", "ArtWebsite");
