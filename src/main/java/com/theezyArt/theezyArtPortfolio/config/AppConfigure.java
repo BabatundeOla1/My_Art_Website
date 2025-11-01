@@ -13,7 +13,8 @@ public class AppConfigure {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // allow all endpoints
-                        .allowedOriginPatterns("*") // allow all origins for testing
+//                        .allowedOriginPatterns("*") // allow all origins for testing
+                        .allowedOrigins("https://olaleyeart.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

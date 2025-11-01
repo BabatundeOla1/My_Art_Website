@@ -66,6 +66,7 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
             permanentAdmin.setRole("ROLE_ADMIN");
             adminRepository.save(permanentAdmin);
             System.out.println((String.valueOf("Admin Registered successfully with email: " + permanentAdmin.getEmail())));
+            System.out.println("Admin password: " + permanentAdmin.getPassword());
         }
     }
 }
