@@ -111,7 +111,7 @@ public class JWTService {
 //            System.out.println("JWTService initializing...");
 //            System.out.println("JWT Secret configuration status: " + (SECRET_KEY != null && !SECRET_KEY.isEmpty() ? "Configured" : "Not configured"));
             if (SECRET_KEY != null && !SECRET_KEY.isEmpty()) {
-                System.out.println("JWT Secret length: " + SECRET_KEY.length());
+//                System.out.println("JWT Secret length: " + SECRET_KEY.length());
             }
         } catch (Exception e) {
             System.err.println("Error during JWTService initialization: " + e.getMessage());

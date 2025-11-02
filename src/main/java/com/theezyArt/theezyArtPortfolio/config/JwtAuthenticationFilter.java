@@ -42,7 +42,7 @@ package com.theezyArt.theezyArtPortfolio.config;
         
         // Skip JWT processing for debug and saveArtwork endpoints to avoid conflicts
         if (requestURI.startsWith("/api/debug")) {
-            System.out.println("JwtAuthenticationFilter: Skipping JWT processing for endpoint: " + requestURI);
+//            System.out.println("JwtAuthenticationFilter: Skipping JWT processing for endpoint: " + requestURI);
             filterChain.doFilter(request, response);
             return;
         }
