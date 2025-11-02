@@ -5,10 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
 @Data
-public class Artwork {
+public class Artwork implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     private String id;

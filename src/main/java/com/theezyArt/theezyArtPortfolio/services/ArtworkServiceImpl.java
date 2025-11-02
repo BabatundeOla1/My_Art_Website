@@ -11,6 +11,9 @@ import com.theezyArt.theezyArtPortfolio.dto.response.UpdateArtworkResponse;
 import com.theezyArt.theezyArtPortfolio.utils.exceptions.ArtworkNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +29,11 @@ public class ArtworkServiceImpl implements ArtworkService{
     @Autowired
     private CloudinaryService cloudinaryService;
 
+
+
     @Override
+    @CachePut(value = "artworks", key = "#result.id")
+    @CacheEvict(value = "allArtworks", allEntries = true)
     public SaveArtworkResponse saveArtwork(SaveArtworkRequest saveArtworkRequest) {
         String imageUrl = cloudinaryService.uploadImage(saveArtworkRequest.getImageFile());
         saveArtworkRequest.setImageUrl(imageUrl);
@@ -37,6 +44,7 @@ public class ArtworkServiceImpl implements ArtworkService{
     }
 
     @Override
+    @CacheEvict(value = {"artworks", "allArtworks"}, allEntries = true)
     public DeleteArtworkResponse deleteArtwork(String title) {
 
         Artwork foundArtwork = artworkRepository.findArtworkByTitle(title)
@@ -50,11 +58,15 @@ public class ArtworkServiceImpl implements ArtworkService{
     }
 
     @Override
+    @Cacheable(value = "allArtworks")
     public List<Artwork> getAllArtworks() {
+        System.out.println("Fetching Artwork from Database......");
         return artworkRepository.findAll();
     }
 
     @Override
+    @CachePut(value = "artworks", key = "#artworkId")
+    @CacheEvict(value = "allArtworks", allEntries = true)
     public UpdateArtworkResponse editArtwork(String artworkId, UpdateArtworkRequest updateArtworkRequest) {
 
         Artwork foundArtwork = artworkRepository.findArtworkById(artworkId)
